@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Document</title>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="app.js"></script>
+    </head>
+    <body ng-app="app">
+        <p>Enter first name: <input type="text" ng-model="user.firstName"></p>
+        <p>Enter last name: <input type="text" ng-model="user.lastName"></p>
+        <p>Enter age: <input type="text" ng-model="user.age"></p>
+        <p>
+            Hey {{ user.name }}
+        </p>
+<!--         <p>
+            Enter Full Name (wont work): <input type="text" ng-model="user.name"></p>
+        </p> -->
+
+
+        <hr>
+        <p>
+            Page:
+            <a ng-click="coll.page = 0">1</a>
+            <a ng-click="coll.page = 1">2</a>
+            <a ng-click="coll.page = 2">3</a>
+        </p>
+        <ul>
+            <li ng-repeat="item in coll.view">{{ item }}</li>
+        </ul>
+    </body>
+</html>
