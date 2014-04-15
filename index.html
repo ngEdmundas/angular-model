@@ -20,10 +20,14 @@
 
         <hr>
         <p>
+            Number of Elements: <input type="text" ng-model="elementNumber" ng-change="changeNumberOfElements()">
+        </p>
+        <p>
+            Per Page: <input type="text" ng-model="coll.size">
+        </p>
+        <p>
             Page:
-            <a ng-click="coll.page = 0">1</a>
-            <a ng-click="coll.page = 1">2</a>
-            <a ng-click="coll.page = 2">3</a>
+            <a ng-repeat="curPage in coll.pages" href="#" ng-click="coll.page = curPage">{{ curPage + 1 }}</a>
         </p>
         <ul>
             <li ng-repeat="item in coll.view">{{ item }}</li>

@@ -4,9 +4,12 @@
     var app = sandbox.angular.module('app', ['ng']);
 
     app.run(function ($rootScope) {
-        var coll = [1, 2, 3, 4, 5, 6, 7, 8];
+        $rootScope.elementNumber = 9;
         $rootScope.user = new User('Jon', 'Doe');
-        $rootScope.coll = new Collection(coll, 3, 0);
+        $rootScope.coll = new Collection(upTo($rootScope.elementNumber), 3);
+        $rootScope.changeNumberOfElements = function () {
+            $rootScope.coll.els = upTo($rootScope.elementNumber);
+        };
     });
 
     function User(firstName, lastName) {
@@ -34,9 +37,18 @@
     createDynamicProperties(Collection, {
         view: ['els', 'size', 'page', function () {
             var offset = this.page * this.size;
-            return this.els.slice(offset, offset + this.size);
+            return this.els.slice(offset, offset + parseInt(this.size));
+        }],
+        pages: ['els', 'size', function () {
+            return upTo(Math.ceil(this.els.length / this.size));
         }]
     });
+
+    function upTo(n) {
+        var lst = [];
+        for (; n; n--) lst.push(n - 1);
+        return lst.reverse();
+    }
 
 
 
