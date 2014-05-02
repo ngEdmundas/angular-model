@@ -53,7 +53,7 @@
 
 
     function createDynamicProperties(Model, getters) {
-        var data = {}, calculated = {}, reverseDeps = {}, fnMap = {}, prop, fn, deps;
+        var reverseDeps = {}, fnMap = {}, prop, fn, deps;
 
         each(getters, function (prop) {
             fn = getters[prop].slice(-1)[0];
@@ -66,11 +66,12 @@
             Object.defineProperty(Model.prototype, prop, {
                 enumerable: true,
                 get: function () {
-                    if (!calculated[prop]) {
+                    this._calculated = this._calculated || {};
+                    if (!this._calculated[prop]) {
                         // initial
-                        calculated[prop] = fn.call(this);
+                        this._calculated[prop] = fn.call(this);
                     }
-                    return calculated[prop];
+                    return this._calculated[prop];
                 }
             });
 
@@ -86,16 +87,19 @@
             Object.defineProperty(Model.prototype, prop, {
                 enumerable: true,
                 get: function () {
-                    return data[prop];
+                    this._data = this._data || {};
+                    return this._data[prop];
                 },
                 set: function (val) {
-                    data[prop] = val;
+                    this._data = this._data || {};
+                    this._data[prop] = val;
                     // recalculate all values based on this
                     reverseDeps[prop].forEach(function (dep) {
                         console.log('update ' + dep);
-                        calculated[dep] = fnMap[dep].call(this);
+                        this._calculated = this._calculated || {};
+                        this._calculated[dep] = fnMap[dep].call(this);
                     }, this);
-                    return data[prop];
+                    return this._data[prop];
                 }
             });
         }, this);
